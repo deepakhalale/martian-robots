@@ -68,5 +68,5 @@
             <version>${slf4j.version}</version>
         </dependency>
         <!-- End logging framework dependencies -->
-
-    </dependencies></project>
+    </dependencies>
+</project>

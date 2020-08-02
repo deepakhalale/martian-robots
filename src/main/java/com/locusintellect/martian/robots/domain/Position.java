@@ -27,4 +27,12 @@ public class Position {
     public Orientation getOrientation() {
         return orientation;
     }
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "coordinates=" + coordinates +
+                ", orientation=" + orientation +
+                '}';
+    }
 }

@@ -11,8 +11,12 @@ import com.locusintellect.martian.robots.commands.MoveRight;
 import com.locusintellect.martian.robots.domain.Coordinates;
 import com.locusintellect.martian.robots.domain.FinalPosition;
 import com.locusintellect.martian.robots.domain.Position;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MartianRobotHandler {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MartianRobotHandler.class);
 
     private final Coordinates lowerLeft;
     private final Coordinates upperRight;
@@ -35,6 +39,10 @@ public class MartianRobotHandler {
                 case FORWARD:
                     currentPosition = new MoveForward(lowerLeft, upperRight).move(currentPosition);
                     break;
+            }
+            if (currentPosition.isLost()) {
+                LOG.warn("Martian Robot at initial position {} fell off the edge of the grid at {}", initialPosition, currentPosition);
+                break;
             }
         }
 

@@ -13,5 +13,8 @@ public enum Orientation {
         return value;
     }
 
-
+    @Override
+    public String toString() {
+        return getValue();
+    }
 }
