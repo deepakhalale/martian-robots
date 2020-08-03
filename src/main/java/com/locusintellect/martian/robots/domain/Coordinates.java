@@ -1,11 +1,19 @@
 package com.locusintellect.martian.robots.domain;
 
+import static java.lang.Integer.parseInt;
+
 import java.util.Objects;
 
 public class Coordinates {
+    private static final String DELIMITER = " ";
 
     private final int x;
     private final int y;
+
+    public static Coordinates newCoordinates(final String input) {
+        final String[] coordinates = input.trim().split(DELIMITER);
+        return new Coordinates(parseInt(coordinates[0]), parseInt(coordinates[1]));
+    }
 
     public static Coordinates newCoordinates(final int x, final int y) {
         return new Coordinates(x, y);

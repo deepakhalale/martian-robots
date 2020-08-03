@@ -8,7 +8,7 @@ import com.locusintellect.martian.robots.domain.Coordinates;
 import com.locusintellect.martian.robots.domain.FinalPosition;
 import com.locusintellect.martian.robots.domain.Position;
 
-public class MoveForward implements Movement {
+public class MoveForward implements Command {
 
     private final Coordinates lowerLeft;
     private final Coordinates upperRight;

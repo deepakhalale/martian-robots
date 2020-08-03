@@ -12,7 +12,7 @@ import com.locusintellect.martian.robots.domain.FinalPosition;
 import com.locusintellect.martian.robots.domain.Orientation;
 import com.locusintellect.martian.robots.domain.Position;
 
-public class MoveRight implements Movement {
+public class MoveRight implements Command {
 
     private final EnumMap<Orientation, Orientation> rightOrientations;
 

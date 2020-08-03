@@ -1,8 +1,5 @@
 package com.locusintellect.martian.robots;
 
-import static com.locusintellect.martian.robots.commands.Instruction.FORWARD;
-import static com.locusintellect.martian.robots.commands.Instruction.LEFT;
-import static com.locusintellect.martian.robots.commands.Instruction.RIGHT;
 import static com.locusintellect.martian.robots.domain.Coordinates.newCoordinates;
 import static com.locusintellect.martian.robots.domain.Orientation.EAST;
 import static com.locusintellect.martian.robots.domain.Orientation.NORTH;
@@ -11,24 +8,30 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
+import com.locusintellect.martian.robots.commands.MoveForward;
+import com.locusintellect.martian.robots.commands.MoveLeft;
+import com.locusintellect.martian.robots.commands.MoveRight;
 import com.locusintellect.martian.robots.domain.Coordinates;
 import com.locusintellect.martian.robots.domain.FinalPosition;
 import com.locusintellect.martian.robots.domain.Orientation;
 import com.locusintellect.martian.robots.domain.Position;
 import org.junit.Test;
 
-public class MartianRobotHandlerTest {
+public class MartianRobotCommandExecutorTest {
 
     private static final Coordinates LOWER_LEFT_COORDINATES = newCoordinates(0, 0);
+
+    private final MartianRobotCommandExecutor underTest = new MartianRobotCommandExecutor();
 
     @Test
     public void shouldProvideFinalPositionOfTheRobotWhenInitialPositionAndInstructionsAreSupplied() {
         final Coordinates upperRightCoordinates = newCoordinates(5, 3);
-        final MartianRobotHandler underTest = new MartianRobotHandler(LOWER_LEFT_COORDINATES, upperRightCoordinates);
+        final MoveRight moveRight = new MoveRight();
+        final MoveForward moveForward = new MoveForward(LOWER_LEFT_COORDINATES, upperRightCoordinates);
 
-        final FinalPosition actualFinalPosition = underTest.sendInstructions(
+        final FinalPosition actualFinalPosition = underTest.executeCommands(
                 newPosition(newCoordinates(1, 1), EAST),
-                asList(RIGHT, FORWARD, RIGHT, FORWARD, RIGHT, FORWARD, RIGHT, FORWARD));
+                asList(moveRight, moveForward, moveRight, moveForward, moveRight, moveForward, moveRight, moveForward));
 
         verifyFinalPositionOfTheRobotAs(1, 1, EAST, actualFinalPosition);
     }
@@ -36,11 +39,13 @@ public class MartianRobotHandlerTest {
     @Test
     public void shouldProvideLastKnownPositionWhenRobotFallsOffTheEdgeOfTheGrid() {
         final Coordinates upperRightCoordinates = newCoordinates(5, 3);
-        final MartianRobotHandler underTest = new MartianRobotHandler(LOWER_LEFT_COORDINATES, upperRightCoordinates);
+        final MoveRight moveRight = new MoveRight();
+        final MoveLeft moveLeft = new MoveLeft();
+        final MoveForward moveForward = new MoveForward(LOWER_LEFT_COORDINATES, upperRightCoordinates);
 
         final Position initialPosition = newPosition(newCoordinates(3, 2), NORTH);
-        final FinalPosition actualFinalPosition = underTest.sendInstructions(initialPosition,
-                asList(FORWARD, RIGHT, RIGHT, FORWARD, LEFT, LEFT, FORWARD, FORWARD, RIGHT, RIGHT, FORWARD, LEFT, LEFT));
+        final FinalPosition actualFinalPosition = underTest.executeCommands(initialPosition,
+                asList(moveForward, moveRight, moveRight, moveForward, moveLeft, moveLeft, moveForward, moveForward, moveRight, moveRight, moveForward, moveLeft, moveLeft));
 
         verifyLastKnownPositionOfTheLostRobotAs(3, 3, NORTH, actualFinalPosition);
     }
