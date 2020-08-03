@@ -46,17 +46,7 @@ public class MartianRobotInstructionsScanner {
     public MartianRobotsInstructions scan() {
         final MartianRobotsInstructions martianRobotsInstructions;
 
-        final InputStream resource = getClass().getResourceAsStream(filePath);
-        final InputStreamReader streamReader;
-        if (resource != null) {
-            streamReader = new InputStreamReader(resource);
-        } else {
-            try {
-                streamReader = new FileReader(filePath);
-            } catch (FileNotFoundException e) {
-                throw new InstructionsFileNotFound(format("File at path %s cannot be found", filePath), e);
-            }
-        }
+        final InputStreamReader streamReader = tryReadingTheFileFromClasspathOrFilesystem();
         try (final BufferedReader reader = new BufferedReader(streamReader)) {
             String line = reader.readLine();
             final Coordinates upperRight = validateAndGetUpperRightCoordinates(line);
@@ -79,6 +69,21 @@ public class MartianRobotInstructionsScanner {
         }
 
         return martianRobotsInstructions;
+    }
+
+    private InputStreamReader tryReadingTheFileFromClasspathOrFilesystem() {
+        final InputStream resource = getClass().getResourceAsStream(filePath);
+        final InputStreamReader streamReader;
+        if (resource != null) {
+            streamReader = new InputStreamReader(resource);
+        } else {
+            try {
+                streamReader = new FileReader(filePath);
+            } catch (FileNotFoundException e) {
+                throw new InstructionsFileNotFound(format("File at path %s cannot be found", filePath), e);
+            }
+        }
+        return streamReader;
     }
 
     private Coordinates validateAndGetUpperRightCoordinates(final String line) {

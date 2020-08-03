@@ -28,7 +28,7 @@ public class MartianRobotMain {
 
         final MartianRobotsInstructions martianRobotsInstructions = scanner.scan();
 
-        MartianRobotCommandExecutor commandExecutor = new MartianRobotCommandExecutor();
+        final MartianRobotCommandExecutor commandExecutor = new MartianRobotCommandExecutor();
         for (final RobotInstructions robotInstructions : martianRobotsInstructions.getRobotInstructions()) {
             final FinalPosition finalPosition = commandExecutor.executeCommands(robotInstructions.getPosition(), robotInstructions.getCommands());
             System.out.println(robotPositionDisplayString(finalPosition));
