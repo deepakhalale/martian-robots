@@ -1,6 +1,7 @@
 package com.locusintellect.martian.robots;
 
 import static com.locusintellect.martian.robots.domain.Coordinates.newCoordinates;
+import static com.locusintellect.martian.robots.domain.Grid.newGrid;
 import static com.locusintellect.martian.robots.domain.Orientation.EAST;
 import static com.locusintellect.martian.robots.domain.Orientation.NORTH;
 import static com.locusintellect.martian.robots.domain.Position.newPosition;
@@ -19,15 +20,13 @@ import org.junit.Test;
 
 public class MartianRobotCommandExecutorTest {
 
-    private static final Coordinates LOWER_LEFT_COORDINATES = newCoordinates(0, 0);
-
     private final MartianRobotCommandExecutor underTest = new MartianRobotCommandExecutor();
 
     @Test
     public void shouldProvideFinalPositionOfTheRobotWhenInitialPositionAndInstructionsAreSupplied() {
         final Coordinates upperRightCoordinates = newCoordinates(5, 3);
         final MoveRight moveRight = new MoveRight();
-        final MoveForward moveForward = new MoveForward(LOWER_LEFT_COORDINATES, upperRightCoordinates);
+        final MoveForward moveForward = new MoveForward(newGrid(upperRightCoordinates));
 
         final FinalPosition actualFinalPosition = underTest.executeCommands(
                 newPosition(newCoordinates(1, 1), EAST),
@@ -41,7 +40,7 @@ public class MartianRobotCommandExecutorTest {
         final Coordinates upperRightCoordinates = newCoordinates(5, 3);
         final MoveRight moveRight = new MoveRight();
         final MoveLeft moveLeft = new MoveLeft();
-        final MoveForward moveForward = new MoveForward(LOWER_LEFT_COORDINATES, upperRightCoordinates);
+        final MoveForward moveForward = new MoveForward(newGrid(upperRightCoordinates));
 
         final Position initialPosition = newPosition(newCoordinates(3, 2), NORTH);
         final FinalPosition actualFinalPosition = underTest.executeCommands(initialPosition,

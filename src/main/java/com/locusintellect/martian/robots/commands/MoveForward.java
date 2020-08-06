@@ -1,21 +1,21 @@
 package com.locusintellect.martian.robots.commands;
 
+import static com.locusintellect.martian.robots.domain.CommandType.FORWARD;
 import static com.locusintellect.martian.robots.domain.Coordinates.newCoordinates;
 import static com.locusintellect.martian.robots.domain.FinalPosition.lost;
 import static com.locusintellect.martian.robots.domain.FinalPosition.newFinalPosition;
 
-import com.locusintellect.martian.robots.domain.Coordinates;
+import com.locusintellect.martian.robots.domain.CommandType;
 import com.locusintellect.martian.robots.domain.FinalPosition;
+import com.locusintellect.martian.robots.domain.Grid;
 import com.locusintellect.martian.robots.domain.Position;
 
 public class MoveForward implements Command {
 
-    private final Coordinates lowerLeft;
-    private final Coordinates upperRight;
+    private final Grid grid;
 
-    public MoveForward(final Coordinates lowerLeft, final Coordinates upperRight) {
-        this.lowerLeft = lowerLeft;
-        this.upperRight = upperRight;
+    public MoveForward(final Grid grid) {
+        this.grid = grid;
     }
 
     @Override
@@ -37,13 +37,14 @@ public class MoveForward implements Command {
                 break;
         }
 
-        if (hasMovedOffTheGrid(newXCoordinate, newYCoordinate)) {
+        if (grid.hasMovedOffTheGrid(newXCoordinate, newYCoordinate)) {
             return lost(position);
         }
         return newFinalPosition(newCoordinates(newXCoordinate, newYCoordinate), position.getOrientation());
     }
 
-    private boolean hasMovedOffTheGrid(final int newXCoordinate, final int newYCoordinate) {
-        return newYCoordinate > upperRight.getY() || newYCoordinate < lowerLeft.getY() || newXCoordinate > upperRight.getX() || newXCoordinate < lowerLeft.getX();
+    @Override
+    public CommandType getType() {
+        return FORWARD;
     }
 }

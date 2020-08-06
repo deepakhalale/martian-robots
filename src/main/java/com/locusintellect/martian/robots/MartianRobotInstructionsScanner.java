@@ -110,7 +110,7 @@ public class MartianRobotInstructionsScanner {
         }
         final CommandFactory factory = new CommandFactory(upperRight);
         for (final char instruction : line.toCharArray()) {
-            commands.add(factory.getInstance(instruction));
+            commands.add(factory.getCommand(instruction));
         }
 
         return commands;
